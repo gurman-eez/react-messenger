@@ -13,9 +13,9 @@ export default class App extends Component{
 
 	state = {
 		data : [
-			{ label: 'Gonna learn React...', important: false, id: nextId() },
-			{ label: 'I thougth that will be way easyier..', important: false, id: nextId() },
-			{ label: 'Shit!', important: false, id: nextId() },
+			{ label: 'Gonna learn React...', important: false, like: false, id: nextId() },
+			{ label: 'I thougth that will be way easyier..', important: false, like: false, id: nextId() },
+			{ label: 'Shit!', important: false, like: false, id: nextId() },
 		]
 	}
 
@@ -44,10 +44,36 @@ export default class App extends Component{
 		})
 	}
 
+	onToggleImportant = (id) => {
+		this.setState(({ data }) => {
+			const index = data.findIndex(elem => elem.id === id);
+			const old = data[index];
+			const newItem = { ...old, important: !old.important };
+			const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)]
+			return {
+				data: newArr
+			}
+		})
+	}
+
+	onToggleLiked = (id) => {
+		this.setState(({data}) => {
+			const index = data.findIndex(elem => elem.id === id);
+			const old = data[index];
+			const newItem = {...old, like: !old.like};
+			const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)]
+			return {
+				data: newArr
+			}
+		})
+	}
+
 
 	render() {
-
 		const {data} = this.state
+
+		const liked = data.filter(elem => elem.like).length;
+		const allPosts = data.length;
 
 		const newData = data.filter(el => {
 			if (el.label) {
@@ -58,14 +84,18 @@ export default class App extends Component{
 
 		return (
 			<div className='app'>
-				<AppHeader />
+				<AppHeader
+				liked={liked}
+				allPosts={allPosts} />
 				<div className='search-panel d-flex'>
 					<SearchPanel />
 					<PostStatusFilter />
 				</div>
 				<PostList 
 				posts={newData}
-				onDelete={this.deleteItem} />
+				onDelete={this.deleteItem}
+				onToggleImportant={this.onToggleImportant}
+				onToggleLiked={this.onToggleLiked} />
 				<PostAddForm 
 				onAdd={this.onAdd} />
 			</div>
