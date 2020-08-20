@@ -2,7 +2,7 @@ import React from 'react';
 
 import './app-header.css';
 
-const AppHeader = ({liked, allPosts}) => {
+const AppHeader = ({liked, allPosts}) => {				// выводим пропсы
 	return (
 		<div className='app-header d-flex'>
 			<h1>Elvin Zeinalabdziyeu</h1>

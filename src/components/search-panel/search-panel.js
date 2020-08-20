@@ -4,11 +4,11 @@ import './search-panel.css';
 
 export default class SearchPanel extends Component {
 
-	state = {
+	state = {									// 	задаем значение в поиске
 		term: ''
 	}
 
-	onUpdateSearch = (e) => {
+	onUpdateSearch = (e) => {				// обновление поиска
 		const term = e.target.value;
 		this.setState({term});
 		this.props.onUpdateSearch(term);

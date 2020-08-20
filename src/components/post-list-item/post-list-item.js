@@ -1,21 +1,16 @@
-import React, {Component} from 'react';
+import React from 'react';
 
 import './post-list-item.css';
 
-export default class PostListItem extends Component {
-
-	
-	render() {
-
-		const { label, onDelete, onToggleImportant, onToggleLiked, important, like} = this.props;
+const PostListItem = ({ label, onDelete, onToggleImportant, onToggleLiked, important, like }) => {		// достаем пропсы
 		
-		let classNames = 'app-list-item d-flex justify-content-between';
+		let classNames = 'app-list-item d-flex justify-content-between';		// базовый класс каждой кнопки
 
-		if (important) {
+		if (important) {								// добавление класса
 			classNames += ' important'
 		}
 
-		if (like) {
+	if (like) {
 			classNames += ' like'
 		}
 
@@ -41,6 +36,7 @@ export default class PostListItem extends Component {
 				</div>
 			</div>
 		)
-	}
 }
+
+export default PostListItem;
 

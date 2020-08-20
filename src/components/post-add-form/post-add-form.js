@@ -4,20 +4,20 @@ import './post-add-form.css';
 
 export default class PostAddForm extends Component {
 
-	state = {
+	state = {									// задаем содержимое input в стейт
 		text: ''
 	}
 
-	onValueChange = (e) => {
+	onValueChange = (e) => {				// отслеживаем изменения в input
 		this.setState({
 			text:e.target.value
 		})
 	}
 
-	onSubmit = (e) => {
-		e.preventDefault();
-		this.props.onAdd(this.state.text)
-		this.setState({
+	onSubmit = (e) => {							// отправка поста
+		e.preventDefault();						// отключение базовых действий кнопки
+		this.props.onAdd(this.state.text)	// добавляем пост
+		this.setState({							// очищаем input после отправки
 			text: ''
 		})
 	}

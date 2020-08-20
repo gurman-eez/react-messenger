@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import nextId from "react-id-generator";
+import nextId from "react-id-generator";		// генератор id
 
 import AppHeader from '../app-header';
 import SearchPanel from '../search-panel';
@@ -12,27 +12,27 @@ import './app.css';
 export default class App extends Component{
 
 	state = {
-		data : [
+		data : [				// База данных постов
 			{ label: 'Gonna learn React...', important: false, like: false, id: nextId() },
 			{ label: 'I thougth that will be way easyier..', important: false, like: false, id: nextId() },
 			{ label: 'Shit!', important: false, like: false, id: nextId() },
 		],
-		term: '',
-		filter: 'all'
+		term: '',			// поиск
+		filter: 'all'		// класс кнопки  по умолчанию
 	}
 
-	deleteItem = (id) => {
+	deleteItem = (id) => {		// удаление поста
 		this.setState(({data}) => {
-			const index = data.findIndex(elem => elem.id === id);
-			const newArr = [...data.slice(0, index), ...data.slice(index + 1)]
+			const index = data.findIndex(elem => elem.id === id);						// находим пост по индексу
+			const newArr = [...data.slice(0, index), ...data.slice(index + 1)]	// создаем новый массив без удаленного поста
 			return {
-				data: newArr
+				data: newArr		// обновляем массив в state
 			}
 		})
 	}
 
-	onAdd = (body) => {
-		if (body.length !== 0) {
+	onAdd = (body) => {				// добавление поста
+		if (body.length !== 0) {	// проверка на наличие символов в input
 			const newItem = {
 				label: body,
 				important: false,
@@ -40,46 +40,34 @@ export default class App extends Component{
 			}
 
 			this.setState(({ data }) => {
-				const newArr = [...data, newItem];
+				const newArr = [...data, newItem];	// создаем новый массив с добавлением поста
 				return {
-					data: newArr
+					data: newArr							// обновляем массив в state
 				}
 			})
 		}
 	}
 
-	onToggleImportant = (id) => {
-		this.setState(({ data }) => {
-			const index = data.findIndex(elem => elem.id === id);
-			const old = data[index];
-			const newItem = { ...old, important: !old.important };
-			const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)]
-			return {
-				data: newArr
-			}
-		})
-	}
-
-	onToggleLiked = (id) => {
+	onToggle = (id, i = 0) => {				// переключение поста на important и like
 		this.setState(({data}) => {
-			const index = data.findIndex(elem => elem.id === id);
-			const old = data[index];
-			const newItem = {...old, like: !old.like};
-			const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)]
+			const index = data.findIndex(elem => elem.id === id);		// находим пост по индексу
+			const old = data[index];						// выделяем пост
+			const newItem = i === 1 ? { ...old, important: !old.important } : { ...old, like: !old.like };		// тогглим выбранный класс 
+			const newArr = [...data.slice(0, index), newItem, ...data.slice(index + 1)]	// создаем новый массив
 			return {
-				data: newArr
+				data: newArr							// обновляем массив в state
 			}
 		})
 	}
 
-	searchPosts = (items, term) => {
-		if(term.length === 0) return items;
-		return items.filter(item => item.label.toUpperCase().indexOf(term.toUpperCase()) > -1)
+	searchPosts = (items, term) => {					// поиск постов
+		if (term.length === 0) return items;
+		return items.filter(item => item.label.toUpperCase().indexOf(term.toUpperCase()) > -1)		// возвращаем совпадения
 	}
 
-	filterPosts = (items, filter) => {
+	filterPosts = (items, filter) => {		// фильтр постов
 		if (filter === 'like') {
-			return items.filter(item => item.like)
+			return items.filter(item => item.like)		// возвращаем лайкнутые посты
 		}
 		return items
 	}
@@ -94,24 +82,24 @@ export default class App extends Component{
 
 
 	render() {
-		const {data,term, filter} = this.state
+		const {data,term, filter} = this.state						// достаем переменные из state
 
-		const liked = data.filter(elem => elem.like).length;
-		const allPosts = data.length;
+		const liked = data.filter(elem => elem.like).length;		// количество лайкнутых постов
+		const allPosts = data.length;										// количество всех постов
 
-		const newData = data.filter(el => {
+		const newData = data.filter(el => {	// фильтруем базу данных постов на наличие label
 			if (el.label) {
 				return el;
 			}
 			return null;
 		});
 
-		const visiblePosts = this.filterPosts(this.searchPosts(newData, term), filter);
+		const visiblePosts = this.filterPosts(this.searchPosts(newData, term), filter);	//показываем посты после поиска и фильтра
 
 		return (
 			<div className='app'>
 				<AppHeader
-					liked={liked}
+					liked={liked}											// задаем пропсы на компоненты
 					allPosts={allPosts} />
 				<div className='search-panel d-flex'>
 					<SearchPanel
@@ -123,8 +111,8 @@ export default class App extends Component{
 				<PostList 
 					posts={visiblePosts}
 					onDelete={this.deleteItem}
-					onToggleImportant={this.onToggleImportant}
-					onToggleLiked={this.onToggleLiked} />
+					onToggle={this.onToggle}
+					 />
 				<PostAddForm 
 					onAdd={this.onAdd} />
 			</div>
